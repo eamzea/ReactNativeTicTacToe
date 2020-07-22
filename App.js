@@ -1,5 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  SafeAreaView,
+} from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import { Button } from "native-base";
 
@@ -12,14 +18,16 @@ const App = () => {
   });
 
   const drawItem = (itemNumber) => {
-    if (itemArray[itemNumber] === "empty") {
-      itemArray[itemNumber] = gameState.isCross;
-      updateGameState(
-        Object.assign({}, gameState, { isCross: !itemArray[itemNumber] })
-      );
-    }
+    if (!gameState.winMessage) {
+      if (itemArray[itemNumber] === "empty") {
+        itemArray[itemNumber] = gameState.isCross;
+        updateGameState(
+          Object.assign({}, gameState, { isCross: !itemArray[itemNumber] })
+        );
+      }
 
-    winGame();
+      winGame();
+    }
   };
 
   const chooseItemIcon = (itemNumber) => {
@@ -125,10 +133,15 @@ const App = () => {
         })
       );
     }
+
+    if (itemArray.every((ele) => ele !== "empty") && !gameState.winMessage) {
+      updateGameState(Object.assign({}, gameState, { winMessage: "Tie" }));
+    }
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>Tic Tac Toe</Text>
       <View style={styles.grid}>
         <View style={styles.row}>
           <View style={styles.item}>
@@ -219,10 +232,10 @@ const App = () => {
         </View>
       </View>
       <Text style={styles.winMessage}>{gameState.winMessage}</Text>
-      <Button full rounded primary style={styles.button}>
+      <Button full rounded primary style={styles.button} onPress={resetGame}>
         <Text style={styles.btnText}>Reset Game</Text>
       </Button>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -231,9 +244,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "center",
   },
-  grid: {},
+  title: {
+    fontSize: 32,
+    fontWeight: "bold",
+    marginBottom: 100,
+  },
   row: {
     flexDirection: "row",
   },
