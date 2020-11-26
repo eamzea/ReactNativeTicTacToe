@@ -1,28 +1,32 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   StyleSheet,
   View,
   Text,
   TouchableOpacity,
   SafeAreaView,
-} from "react-native";
-import { Entypo } from "@expo/vector-icons";
-import { Button } from "native-base";
+} from 'react-native';
+import { Entypo } from '@expo/vector-icons';
+import { Button } from 'native-base';
 
-let itemArray = new Array(9).fill("empty");
+let itemArray = new Array(9).fill('empty');
 
 const App = () => {
   const [gameState, updateGameState] = useState({
     isCross: false,
-    winMessage: "",
+    winMessage: '',
+    disabledBtn: true,
   });
 
-  const drawItem = (itemNumber) => {
+  const drawItem = itemNumber => {
     if (!gameState.winMessage) {
-      if (itemArray[itemNumber] === "empty") {
+      if (itemArray[itemNumber] === 'empty') {
         itemArray[itemNumber] = gameState.isCross;
         updateGameState(
-          Object.assign({}, gameState, { isCross: !itemArray[itemNumber] })
+          Object.assign({}, gameState, {
+            isCross: !itemArray[itemNumber],
+            disabledBtn: false,
+          })
         );
       }
 
@@ -30,112 +34,118 @@ const App = () => {
     }
   };
 
-  const chooseItemIcon = (itemNumber) => {
-    if (itemArray[itemNumber] !== "empty") {
-      return itemArray[itemNumber] ? "cross" : "circle";
+  const chooseItemIcon = itemNumber => {
+    if (itemArray[itemNumber] !== 'empty') {
+      return itemArray[itemNumber] ? 'cross' : 'circle';
     } else {
-      return "pencil";
+      return 'pencil';
     }
   };
 
-  const chooseItemColor = (itemNumber) => {
-    if (itemArray[itemNumber] !== "empty") {
-      return itemArray[itemNumber] ? "red" : "green";
+  const chooseItemColor = itemNumber => {
+    if (itemArray[itemNumber] !== 'empty') {
+      return itemArray[itemNumber] ? 'red' : 'green';
     } else {
-      return "black";
+      return 'black';
     }
   };
 
   const resetGame = () => {
-    itemArray.fill("empty");
-    updateGameState(Object.assign({}, gameState, { winMessage: "" }));
+    itemArray.fill('empty');
+    updateGameState(
+      Object.assign({}, gameState, {
+        winMessage: '',
+        isCross: false,
+        disabledBtn: true,
+      })
+    );
   };
 
   const winGame = () => {
     if (
-      itemArray[0] !== "empty" &&
+      itemArray[0] !== 'empty' &&
       itemArray[0] == itemArray[1] &&
       itemArray[1] == itemArray[2]
     ) {
       updateGameState(
         Object.assign({}, gameState, {
-          winMessage: (itemArray[0] ? "Cross" : "Circle").concat(" WIN"),
+          winMessage: (gameState.isCross ? 'Cross' : 'Circle').concat(' WIN'),
         })
       );
     } else if (
-      itemArray[3] !== "empty" &&
+      itemArray[3] !== 'empty' &&
       itemArray[3] == itemArray[4] &&
       itemArray[4] == itemArray[5]
     ) {
       updateGameState(
         Object.assign({}, gameState, {
-          winMessage: (itemArray[0] ? "Cross" : "Circle").concat(" WIN"),
+          winMessage: (gameState.isCross ? 'Cross' : 'Circle').concat(' WIN'),
         })
       );
     } else if (
-      itemArray[6] !== "empty" &&
+      itemArray[6] !== 'empty' &&
       itemArray[6] == itemArray[7] &&
       itemArray[7] == itemArray[8]
     ) {
       updateGameState(
         Object.assign({}, gameState, {
-          winMessage: (itemArray[0] ? "Cross" : "Circle").concat(" WIN"),
+          winMessage: (gameState.isCross ? 'Cross' : 'Circle').concat(' WIN'),
         })
       );
     } else if (
-      itemArray[0] !== "empty" &&
+      itemArray[0] !== 'empty' &&
       itemArray[0] == itemArray[3] &&
       itemArray[3] == itemArray[6]
     ) {
       updateGameState(
         Object.assign({}, gameState, {
-          winMessage: (itemArray[0] ? "Cross" : "Circle").concat(" WIN"),
+          winMessage: (gameState.isCross ? 'Cross' : 'Circle').concat(' WIN'),
         })
       );
     } else if (
-      itemArray[1] !== "empty" &&
+      itemArray[1] !== 'empty' &&
       itemArray[1] == itemArray[4] &&
       itemArray[4] == itemArray[7]
     ) {
       updateGameState(
         Object.assign({}, gameState, {
-          winMessage: (itemArray[0] ? "Cross" : "Circle").concat(" WIN"),
+          winMessage: (gameState.isCross ? 'Cross' : 'Circle').concat(' WIN'),
         })
       );
     } else if (
-      itemArray[2] !== "empty" &&
+      itemArray[2] !== 'empty' &&
       itemArray[2] == itemArray[5] &&
       itemArray[5] == itemArray[8]
     ) {
       updateGameState(
         Object.assign({}, gameState, {
-          winMessage: (itemArray[0] ? "Cross" : "Circle").concat("  WIN"),
+          winMessage: (gameState.isCross ? 'Cross' : 'Circle').concat('  WIN'),
         })
       );
     } else if (
-      itemArray[0] !== "empty" &&
+      itemArray[0] !== 'empty' &&
       itemArray[0] == itemArray[4] &&
       itemArray[4] == itemArray[8]
     ) {
       updateGameState(
         Object.assign({}, gameState, {
-          winMessage: (itemArray[0] ? "Cross" : "Circle").concat(" WIN"),
+          winMessage: (gameState.isCross ? 'Cross' : 'Circle').concat(' WIN'),
         })
       );
     } else if (
-      itemArray[2] !== "empty" &&
+      itemArray[2] !== 'empty' &&
       itemArray[2] == itemArray[4] &&
       itemArray[4] == itemArray[6]
     ) {
       updateGameState(
         Object.assign({}, gameState, {
-          winMessage: (itemArray[0] ? "Cross" : "Circle").concat(" WIN"),
+          winMessage: (gameState.isCross ? 'Cross' : 'Circle').concat(' WIN'),
         })
       );
     }
 
-    if (itemArray.every((ele) => ele !== "empty") && !gameState.winMessage) {
-      updateGameState(Object.assign({}, gameState, { winMessage: "Tie" }));
+    if (itemArray.every(ele => ele !== 'empty') && !gameState.winMessage) {
+      updateGameState(Object.assign({}, gameState, { winMessage: 'Tie' }));
     }
   };
 
@@ -232,7 +242,14 @@ const App = () => {
         </View>
       </View>
       <Text style={styles.winMessage}>{gameState.winMessage}</Text>
-      <Button full rounded primary style={styles.button} onPress={resetGame}>
+      <Button
+        full
+        rounded
+        primary
+        style={styles.button}
+        onPress={resetGame}
+        disabled={gameState.disabledBtn}
+      >
         <Text style={styles.btnText}>Reset Game</Text>
       </Button>
     </SafeAreaView>
@@ -242,34 +259,34 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
+    backgroundColor: '#fff',
+    alignItems: 'center',
   },
   title: {
     fontSize: 32,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 100,
   },
   row: {
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   item: {
     borderWidth: 1,
-    borderColor: "#000000",
+    borderColor: '#000000',
     padding: 30,
   },
   winMessage: {
     padding: 20,
     fontSize: 32,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   button: {
     margin: 20,
     padding: 10,
   },
   btnText: {
-    color: "#FFFFFF",
-    fontWeight: "bold",
+    color: '#FFFFFF',
+    fontWeight: 'bold',
   },
 });
 
